@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajuda Animais - Adoção & Voluntariado</title>
+    <!-- Bootstrap CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .hero {
+            background: linear-gradient(135deg, #198754 0%, #20c997 100%);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .card-img-custom {
+            height: 200px;
+            object-fit: cover;
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+    <header class="hero shadow">
+        <div class="container">
+            <h1 class="display-4 fw-bold"><i class="bi bi-heart-fill text-danger"></i> Associação de Proteção Animal</h1>
+            <p class="lead">Conheça nossos animais disponíveis para adoção e saiba como ajudar como voluntário.</p>
+        </div>
+    </header>
+
+    <main class="container mb-5">
+        
+        <!-- Tabs Nav -->
+        <ul class="nav nav-pills justify-content-center mb-4" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active rounded-pill px-4" id="adopt-tab" data-bs-toggle="tab" data-bs-target="#adopt" type="button" role="tab" aria-controls="adopt" aria-selected="true">
+                    <i class="bi bi-search-heart"></i> Para Adoção
+                </button>
+            </li>
+            <li class="nav-item ms-3" role="presentation">
+                <button class="nav-link rounded-pill px-4" id="volunteer-tab" data-bs-toggle="tab" data-bs-target="#volunteer" type="button" role="tab" aria-controls="volunteer" aria-selected="false">
+                    <i class="bi bi-person-hearts"></i> Voluntariado
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tabs Content -->
+        <div class="tab-content" id="myTabContent">
+            
+            <!-- Adopt Tab -->
+            <div class="tab-pane fade show active" id="adopt" role="tabpanel" aria-labelledby="adopt-tab">
+                <div class="row g-4">
+                    {% for animal in animals %}
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100 shadow-sm border-0">
+                            {% if animal.image_url %}
+                            <img src="{{ animal.image_url }}" class="card-img-top card-img-custom" alt="{{ animal.name }}">
+                            {% else %}
+                            <div class="card-img-top card-img-custom d-flex align-items-center justify-content-center text-muted">
+                                <i class="bi bi-camera fs-1"></i>
+                            </div>
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title text-success">{{ animal.name }}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted"><i class="bi bi-tag"></i> {{ animal.species }} | <i class="bi bi-calendar3"></i> {{ animal.age }}</h6>
+                                <p class="card-text">{{ animal.description }}</p>
+                            </div>
+                            <div class="card-footer bg-white border-0 pb-3 text-center">
+                                <button class="btn btn-outline-success w-100">Quero Adotar</button>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-12 text-center text-muted py-5">
+                        <i class="bi bi-inbox fs-1"></i>
+                        <p class="mt-2">Nenhum animal cadastrado no momento.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Volunteer Tab -->
+            <div class="tab-pane fade" id="volunteer" role="tabpanel" aria-labelledby="volunteer-tab">
+                <div class="row g-4">
+                    {% for opportunity in opportunities %}
+                    <div class="col-md-6">
+                        <div class="card h-100 shadow-sm border-0 border-start border-success border-4">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ opportunity.title }}</h5>
+                                <h6 class="card-subtitle mb-3 text-muted"><i class="bi bi-clock"></i> {{ opportunity.schedule }}</h6>
+                                <p class="card-text">{{ opportunity.description }}</p>
+                            </div>
+                            <div class="card-footer bg-white border-0 pb-3 text-end">
+                                <button class="btn btn-success">Me Inscrever</button>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-12 text-center text-muted py-5">
+                        <i class="bi bi-inbox fs-1"></i>
+                        <p class="mt-2">Nenhuma vaga de voluntariado no momento.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+        </div>
+
+    </main>
+
+    <footer class="bg-dark text-white text-center py-3 mt-auto">
+        <div class="container">
+            <small>&copy; 2026 Associação de Proteção Animal. Todos os direitos reservados.</small>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.css"></script>
+    <!-- Replacing incorrect JS CDN above with correct JS tag -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
