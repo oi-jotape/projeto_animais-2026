@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel da ONG - Ajuda Animais</title>
+    <!-- Bootstrap CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <header class="bg-dark text-white py-3 shadow-sm mb-4">
+        <div class="container d-flex justify-content-between align-items-center">
+            <h3 class="mb-0"><i class="bi bi-shield-lock"></i> Área da ONG</h3>
+            <div>
+                <a href="{% url 'core:index' %}" class="btn btn-outline-light btn-sm me-2">Ver Site</a>
+                <a href="{% url 'admin:logout' %}?next=/" class="btn btn-danger btn-sm">Sair</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mb-5">
+        
+        {% if messages %}
+        <div class="row mb-4">
+            <div class="col-12">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <h2 class="mb-4">Gerenciamento de Pedidos</h2>
+
+        <div class="row">
+            <!-- Pedidos de Adoção -->
+            <div class="col-lg-6 mb-4">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="bi bi-heart-fill"></i> Pedidos de Adoção</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <ul class="list-group list-group-flush">
+                            {% for req in adoptions %}
+                            <li class="list-group-item p-3">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <h6 class="mb-1">{{ req.name }} quer adotar <strong>{{ req.animal.name }}</strong></h6>
+                                        <small class="text-muted"><i class="bi bi-envelope"></i> {{ req.email }} | <i class="bi bi-telephone"></i> {{ req.phone }}</small>
+                                    </div>
+                                    <span class="badge {% if req.status == 'Aprovado' %}bg-success{% elif req.status == 'Rejeitado' %}bg-danger{% else %}bg-warning text-dark{% endif %}">
+                                        {{ req.status }}
+                                    </span>
+                                </div>
+                                <p class="mb-2 text-muted small"><strong>Motivo:</strong> {{ req.reason }}</p>
+                                {% if req.status == 'Pendente' %}
+                                <div class="mt-2 text-end">
+                                    <a href="{% url 'core:update_adoption_status' req.pk 'Aprovado' %}" class="btn btn-sm btn-outline-success"><i class="bi bi-check-lg"></i> Aprovar</a>
+                                    <a href="{% url 'core:update_adoption_status' req.pk 'Rejeitado' %}" class="btn btn-sm btn-outline-danger"><i class="bi bi-x-lg"></i> Recusar</a>
+                                </div>
+                                {% endif %}
+                            </li>
+                            {% empty %}
+                            <li class="list-group-item text-muted text-center py-4">Nenhum pedido de adoção.</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inscrições de Voluntários -->
+            <div class="col-lg-6 mb-4">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="bi bi-person-hearts"></i> Inscrições para Voluntariado</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <ul class="list-group list-group-flush">
+                            {% for vol in volunteers %}
+                            <li class="list-group-item p-3">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <h6 class="mb-1">{{ vol.name }}</h6>
+                                        <small class="text-muted">Vaga: <strong>{{ vol.opportunity.title }}</strong></small><br>
+                                        <small class="text-muted"><i class="bi bi-envelope"></i> {{ vol.email }} | <i class="bi bi-telephone"></i> {{ vol.phone }}</small>
+                                    </div>
+                                    <span class="badge {% if vol.status == 'Aprovado' %}bg-success{% elif vol.status == 'Rejeitado' %}bg-danger{% else %}bg-warning text-dark{% endif %}">
+                                        {{ vol.status }}
+                                    </span>
+                                </div>
+                                {% if vol.message %}
+                                <p class="mb-2 text-muted small"><strong>Mensagem:</strong> {{ vol.message }}</p>
+                                {% endif %}
+                                {% if vol.status == 'Pendente' %}
+                                <div class="mt-2 text-end">
+                                    <a href="{% url 'core:update_volunteer_status' vol.pk 'Aprovado' %}" class="btn btn-sm btn-outline-success"><i class="bi bi-check-lg"></i> Aprovar</a>
+                                    <a href="{% url 'core:update_volunteer_status' vol.pk 'Rejeitado' %}" class="btn btn-sm btn-outline-danger"><i class="bi bi-x-lg"></i> Recusar</a>
+                                </div>
+                                {% endif %}
+                            </li>
+                            {% empty %}
+                            <li class="list-group-item text-muted text-center py-4">Nenhuma inscrição de voluntário.</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

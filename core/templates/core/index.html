@@ -26,7 +26,17 @@
 <body class="bg-light">
 
     <header class="hero shadow">
-        <div class="container">
+        <div class="container position-relative">
+            {% if user.is_authenticated %}
+            <div class="position-absolute top-0 end-0 mt-2 me-2">
+                <a href="{% url 'core:dashboard' %}" class="btn btn-dark btn-sm"><i class="bi bi-shield-lock"></i> Área da ONG</a>
+            </div>
+            {% else %}
+            <div class="position-absolute top-0 end-0 mt-2 me-2">
+                <a href="{% url 'admin:login' %}?next=/painel/" class="btn btn-outline-light btn-sm">Login ONG</a>
+            </div>
+            {% endif %}
+            
             <h1 class="display-4 fw-bold"><i class="bi bi-heart-fill text-danger"></i> Associação de Proteção Animal</h1>
             <p class="lead">Conheça nossos animais disponíveis para adoção e saiba como ajudar como voluntário.</p>
         </div>
@@ -34,6 +44,19 @@
 
     <main class="container mb-5">
         
+        {% if messages %}
+        <div class="row mb-4">
+            <div class="col-12">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
         <!-- Tabs Nav -->
         <ul class="nav nav-pills justify-content-center mb-4" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
@@ -70,7 +93,7 @@
                                 <p class="card-text">{{ animal.description }}</p>
                             </div>
                             <div class="card-footer bg-white border-0 pb-3 text-center">
-                                <button class="btn btn-outline-success w-100">Quero Adotar</button>
+                                <a href="{% url 'core:animal_adopt' animal.pk %}" class="btn btn-outline-success w-100">Quero Adotar</a>
                             </div>
                         </div>
                     </div>
@@ -95,7 +118,7 @@
                                 <p class="card-text">{{ opportunity.description }}</p>
                             </div>
                             <div class="card-footer bg-white border-0 pb-3 text-end">
-                                <button class="btn btn-success">Me Inscrever</button>
+                                <a href="{% url 'core:volunteer_subscribe' opportunity.pk %}" class="btn btn-success">Me Inscrever</a>
                             </div>
                         </div>
                     </div>
